@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+
+
+int main() {
+    std::ifstream fin("bst.in");
+    std::ofstream fout("bst.out");
+    int n;
+    fin >> n;
+    std::vector<long long> vec(n);
+    std::vector<long long> left_bound(n);
+    left_bound[0] = INT32_MIN;
+    left_bound[0] -= 1;
+    std::vector<long long> right_bound(n);
+    char a;
+    int parent;
+    right_bound[0] = INT32_MAX;
+    right_bound[0] += 1;
+    fin >> vec[0];
+    for (int i = 1; i < n; ++i){
+        fin >> vec[i] >> parent >> a;
+
+        if(a == 'L'){
+            right_bound[i] = vec[parent - 1];
+            left_bound[i] = left_bound[parent - 1];
+        }else{
+            left_bound[i] = vec[parent - 1];
+            right_bound[i] = right_bound[parent - 1];
+        }
+
+        if(vec[i] < left_bound[i] || vec[i] >= right_bound[i]){
+            fout << "NO";
+            return 0;
+        }
+    }
+
+    fout << "YES";
+    return 0;
+}
